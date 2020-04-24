@@ -8,8 +8,20 @@ import "fmt"
 */
 type deck []string
 
+func newDeck() deck {
+	cards := deck{}
+	suites := []string{"Spades", "Clubs", "Diamonds", "Hearts"}
+	values := []string{"Ace", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King"}
+	for _, s := range suites {
+		for _, v := range values {
+			cards = append(cards, v+" of "+s)
+		}
+	}
+	return cards
+}
+
 func (d deck) print() {
 	for i, card := range d {
-		fmt.Printf("%d. %s\n", i, card)
+		fmt.Printf("%d. %s\n", i+1, card)
 	}
 }
