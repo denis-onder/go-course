@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"io/ioutil"
+	"strings"
+)
 
 /*
 	Create a new type 'deck'.
@@ -28,4 +32,21 @@ func (d deck) print() {
 
 func deal(d deck, size int) (deck, deck) {
 	return d[:size], d[size:]
+}
+
+func (d deck) toString() string {
+	return strings.Join([]string(d), ",")
+}
+
+func (d deck) saveToFile(filename string) error {
+	return ioutil.WriteFile(filename, []byte(d.toString()), 0666)
+}
+
+func newDeckFromFile(filename string) deck {
+	bytes, err := ioutil.ReadFile(filename)
+	if err != nil {
+		fmt.Printf("An error has occured! %s", err)
+	}
+	s := string(bytes)
+	return deck(strings.Split(s, ","))
 }

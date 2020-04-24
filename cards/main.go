@@ -1,8 +1,14 @@
 package main
 
+import "fmt"
+
 func main() {
 	cards := newDeck()
-	hand, cards := deal(cards, 5)
-	cards.print()
-	hand.print()
+	err := cards.saveToFile("deck")
+	if err != nil {
+		fmt.Printf("An error has occured! %s", err)
+	}
+	fmt.Println("Deck saved")
+	newDeck := newDeckFromFile("deck")
+	fmt.Println(newDeck)
 }
