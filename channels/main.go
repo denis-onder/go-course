@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
 )
 
 func getStatus(website string, c chan string) {
@@ -22,7 +23,16 @@ func main() {
 	for _, site := range sites {
 		go getStatus(site, c)
 	}
-	for {
-		go getStatus(<-c, c)
+	// for {
+	// 	go getStatus(<-c, c)
+	// }
+	// for l := range c {
+	// 	go getStatus(l, c)
+	// }
+	for l := range c {
+		go func(s string) {
+			time.Sleep(5 * time.Second)
+			getStatus(s, c)
+		}(l)
 	}
 }
