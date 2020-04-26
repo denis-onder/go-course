@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 )
@@ -12,8 +13,9 @@ func main() {
 		fmt.Printf("An error has occured! %v\n", err)
 		os.Exit(1)
 	}
-	bs := make([]byte, 99999)
-	res.Body.Read(bs)
 	defer res.Body.Close()
-	fmt.Println(string(bs))
+	// buf := make([]byte, 32*1024)
+	// res.Body.Read(buf)
+	// fmt.Println(string(buf))
+	io.Copy(os.Stdout, res.Body)
 }
