@@ -5,17 +5,22 @@ import (
 	"net/http"
 )
 
-func getStatus(website string) {
+func getStatus(website string, c chan string) {
 	res, err := http.Get(website)
 	if err != nil {
-		fmt.Printf("%s => Not available.\n", website)
+		c <- website + " => Not available."
+		return
 	}
-	fmt.Printf("%s => %s\n", website, res.Status)
+	c <- website + " => " + res.Status
 }
 
 func main() {
+	c := make(chan string)
 	sites := []string{"https://google.com/", "https://duckduckgo.com/", "https://golang.org/"}
 	for _, site := range sites {
-		getStatus(site)
+		go getStatus(site, c)
+	}
+	for i := 0; i < len(sites); i++ {
+		fmt.Println(<-c)
 	}
 }
